@@ -49,11 +49,11 @@
 						</div>
 						<div class="form-group row">
 							<label class="col-md-2 text-bold" for="username">Username:</label>
-							<input type="text" th:field="*{username}"
+							<input type="text" th:field="*{user.username}"
 								class="form-control form-control-sm col-md-4"
 								placeholder="username" /> &nbsp;<small
 								class="form-text text-danger"
-								th:if="${#fields.hasErrors('username')}" th:errors=*{username}>
+								th:if="${#fields.hasErrors('user.username')}" th:errors=*{user.username}>
 							</small>
 
 						</div>
@@ -70,9 +70,9 @@
 						<div class="form-group row">
 							<label class="col-md-2" for="password">Password:</label> <input
 								type="password" class="form-control form-control-sm col-md-4"
-								th:field="*{password}" placeholder="Password" />&nbsp; <small
+								th:field="*{user.password}" placeholder="Password" />&nbsp; <small
 								class="form-text text-danger"
-								th:if="${#fields.hasErrors('password')}" th:errors=*{password}>
+								th:if="${#fields.hasErrors('user.password')}" th:errors=*{user.password}>
 							</small>
 						</div>
 

@@ -60,11 +60,11 @@
 						</div>
 
 						<div class="form-group row">
-							<label class="col-md-2" for="age">EDAD:</label> <input
-								type="number" class="form-control form-control-sm col-md-4"
-								th:field="*{age}" placeholder="Edad" />&nbsp; <small
+							<label class="col-md-2" for="dateBirth">FECHA DE NACIMIENTO:</label> <input
+								type="date" class="form-control form-control-sm col-md-4"
+								th:field="*{dateBirth}" />&nbsp; <small
 								class="form-text text-danger"
-								th:if="${#fields.hasErrors('age')}" th:errors=*{age}> </small>
+								th:if="${#fields.hasErrors('dateBirth')}" th:errors=*{dateBirth}> </small>
 						</div>
 
 						<div class="form-group row">
@@ -85,9 +85,9 @@
 						<div class="form-group row">
 							<label class="col-md-2" for="direction">DIRECCIÓN:</label> <input
 								class="form-control form-control-sm col-md-4"
-								th:field="*{direction}" placeholder="Dirección" />&nbsp; <small
+								th:field="*{address}" placeholder="Dirección" />&nbsp; <small
 								class="form-text text-danger"
-								th:if="${#fields.hasErrors('direction')}" th:errors=*{direction}>
+								th:if="${#fields.hasErrors('address')}" th:errors=*{address}>
 							</small>
 						</div>
 

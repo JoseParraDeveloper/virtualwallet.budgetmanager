@@ -36,13 +36,14 @@
 						<th scope="col">NOMBRE</th>
 						<th scope="col">APELLIDO</th>
 						<th scope="col">EMAIL</th>
-						<th scope="col">EDAD</th>
+						<th scope="col">FECHA DE NACIMIENTO</th>
 						<th scope="col">DNI</th>
 						<th scope="col">TELÉFONO</th>
 						<th scope="col">DIRECCIÓN</th>
 						<th scope="col">OPERACIONES</th>
 						<th scope="col">EDITAR</th>
-						<th scope="col">ELIMINAR</th>
+						<th th:if="${isEnabled==true}" scope="col">DESACTIVAR</th>
+						<th th:if="${isEnabled==false}" scope="col">ACTIVAR</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -59,23 +60,30 @@
 						<td th:text="${lp.name}"></td>
 						<td th:text="${lp.surname}"></td>
 						<td th:text="${lp.email}"></td>
-						<td th:text="${lp.age}"></td>
+						<td th:text="${lp.dateBirth}"></td>
 						<td th:text="${lp.dni}"></td>
 						<td th:text="${lp.phoneNumber}"></td>
-						<td th:text="${lp.direction}"></td>
+						<td th:text="${lp.address}"></td>
 						<td><a class="btn btn-primary btn-sm"
 							th:href="@{/operation/person/{id} (id=${lp.id})}"
-							title="Operaciones del Usuario"><i class="fa fa-tasks"
+							title="Operaciones del Usuario"><i class="fa fa-tasks fa-lg"
 								aria-hidden="true">Operaciones</i></a></td>
 						<td><a class="btn btn-success btn-sm"
 							th:href="@{/people/edit/{id} (id=${lp.id})}"
-							title="Editar Usuario"><i class="fa fa-pencil-square-o"
+							title="Editar Usuario"><i class="fa fa-pencil-square-o fa-lg"
 								aria-hidden="true">Editar</i> </a></td>
-						<td><a class="btn btn-danger btn-sm"
-							th:href="@{/people/delete/{id} (id=${lp.id})}"
-							title="Eliminar Usuario"
-							onclick="return confirm('¿Confirmas Eliminar al Usuario?')"><i
-								class="fa fa-trash-o fa-lg">Eliminar</i></a></td>
+						<td th:if="${isEnabled==true}"><a
+							class="btn btn-success btn-sm"
+							th:href="@{/people/enabled/{id}?isEnabled=false (id=${lp.id})}"
+							title="Desactivar Usuario"
+							onclick="return confirm('¿Confirmas Desactivar al Usuario?')"><i
+								class="fa fa-check-square-o fa-lg" aria-hidden="true">Desactivar</i></a></td>
+						<td th:if="${isEnabled==false}"><a
+							class="btn btn-success btn-sm"
+							th:href="@{/people/enabled/{id}?isEnabled=true (id=${lp.id})}"
+							title="Activar Usuario"
+							onclick="return confirm('¿Confirmas Activar al Usuario?')"><i
+								class="fa fa-check-square-o fa-lg" aria-hidden="true">Activar</i></a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -105,7 +113,6 @@
 						</ul>
 					</nav>
 				</div>
-
 			</div>
 		</div>
 	</div>

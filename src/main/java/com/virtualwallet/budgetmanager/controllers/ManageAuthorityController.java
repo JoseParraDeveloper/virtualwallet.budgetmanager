@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.virtualwallet.budgetmanager.entities.AuthorityEntity;
+import com.virtualwallet.budgetmanager.entities.Authority;
 import com.virtualwallet.budgetmanager.exceptions.AuthorityNotFoundException;
 import com.virtualwallet.budgetmanager.service.IAuthorityService;
 
@@ -27,7 +27,7 @@ public class ManageAuthorityController {
 	@GetMapping
 	public String manageAuthority(Model model) {
 
-		List<AuthorityEntity> listAuthorities = authorityService.getAllAuthorities();
+		List<Authority> listAuthorities = authorityService.getAllAuthorities();
 		model.addAttribute("listAuthorities", listAuthorities);
 		model.addAttribute("titleTable",
 				(listAuthorities.isEmpty() ? "La Aplicación no tiene ROLES." : "ROLES en la Aplicación"));
@@ -38,7 +38,7 @@ public class ManageAuthorityController {
 	@GetMapping(value = "/edit/{id}")
 	public String editDescriptionAuthority(@PathVariable("id") Long idAuthority, Model model,
 			RedirectAttributes attribute) throws AuthorityNotFoundException {
-		AuthorityEntity authorityEntity = null;
+		Authority authorityEntity = null;
 		try {
 			authorityEntity = authorityService.getByIdAuthority(idAuthority);
 		} catch (AuthorityNotFoundException e) {
@@ -51,7 +51,7 @@ public class ManageAuthorityController {
 	}
 
 	@PostMapping("/saveAuthority")
-	public String savePerson(@Valid @ModelAttribute("authorityEntity") AuthorityEntity authorityEntity, Model model,
+	public String savePerson(@Valid @ModelAttribute("authorityEntity") Authority authorityEntity, Model model,
 			RedirectAttributes attribute) {
 
 		authorityService.saveAuthority(authorityEntity);

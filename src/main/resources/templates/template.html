@@ -24,17 +24,26 @@
 					<li class="nav-item active"><a class="nav-link" th:href="@{/}">HOME
 							<span class="sr-only">(current)</span>
 					</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{#}">ADMINISTRAR
-							PAGOS</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{#}">MIS
-							PLAZOS FIJOS</a></li>
-
-					<li class="nav-item"><span
-						th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><a
-							class="nav-link" th:href="@{/people/}">LISTA USUARIOS</a></span></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/manageAuthority/}">ADMINISTRAR
+					<li class="nav-item" sec:authorize="hasRole('ROLE_USER')"><a
+						class="nav-link" th:href="@{#}">ADMINISTRAR PAGOS</a></li>
+					<li class="nav-item" sec:authorize="hasRole('ROLE_USER')"><a
+						class="nav-link" th:href="@{#}">MIS PLAZOS FIJOS</a></li>
+					<li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')"><a
+						class="nav-link" th:href="@{/manageAuthority/}">ADMINISTRAR
 							ROLES</a></li>
-
+					<li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')"><a
+						class="nav-link dropdown-toggle" th:href="@{#}"
+						id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+						aria-expanded="false">USUARIOS </a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<li><a class="dropdown-item"
+								th:href="@{/people/?isEnabled=true}">USUARIOS ACTIVOS</a></li>
+							<li><a class="dropdown-item"
+								th:href="@{/people/?isEnabled=false}">USUARIOS INACTIVOS</a></li>
+							<li><hr class="dropdown-divider"></li>
+							<li><a class="dropdown-item" th:href="@{/people/}">LISTA
+									DE USUARIOS</a></li>
+						</ul></li>
 				</ul>
 
 				<div class="form-inline my-2 my-lg-0"
@@ -100,6 +109,12 @@
 			src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 		<script
 			src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+
+		<script
+			src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+
 
 	</div>
 

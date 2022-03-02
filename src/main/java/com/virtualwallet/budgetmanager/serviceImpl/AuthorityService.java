@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.virtualwallet.budgetmanager.entities.AuthorityEntity;
+import com.virtualwallet.budgetmanager.entities.Authority;
 import com.virtualwallet.budgetmanager.exceptions.AuthorityNotFoundException;
 import com.virtualwallet.budgetmanager.repository.IAuthorityRepository;
 import com.virtualwallet.budgetmanager.service.IAuthorityService;
@@ -17,9 +17,9 @@ public class AuthorityService implements IAuthorityService {
 	private IAuthorityRepository authorityRepository;
 
 	@Override
-	public AuthorityEntity getByIdAuthority(Long id) throws AuthorityNotFoundException {
+	public Authority getByIdAuthority(Long id) throws AuthorityNotFoundException {
 
-		AuthorityEntity authority = authorityRepository.getByIdAuthority(id)
+		Authority authority = authorityRepository.getByIdAuthority(id)
 				.orElseThrow(() -> new AuthorityNotFoundException("Rol con " + id + "  No Existe."));
 
 		return authority;
@@ -32,13 +32,13 @@ public class AuthorityService implements IAuthorityService {
 	}
 
 	@Override
-	public List<AuthorityEntity> getAllAuthorities() {
+	public List<Authority> getAllAuthorities() {
 
 		return authorityRepository.findAll();
 	}
 
 	@Override
-	public void saveAuthority(AuthorityEntity authorityEntity) {
+	public void saveAuthority(Authority authorityEntity) {
 
 		authorityRepository.save(authorityEntity);
 	}

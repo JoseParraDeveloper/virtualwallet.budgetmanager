@@ -1,20 +1,17 @@
 package com.virtualwallet.budgetmanager.entities;
 
 import java.util.Date;
-import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.JoinColumn;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,11 +21,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.virtualwallet.budgetmanager.enumTypes.Gender;
 
 @Entity
 @Table(name = "people")
-public class PersonEntity {
+public class Person {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,17 +44,17 @@ public class PersonEntity {
 	@Column
 	@Pattern(regexp = "^[0-9]*$")
 	private String dni;
-	@Column
+	@Column(unique = true)
+	@NotBlank
 	@Email
 	private String email;
 	@Column
 	@Pattern(regexp = "^[0-9,+,\s]*$")
 	private String phoneNumber;
-	@Column(length = 30)
-	private String direction;
 	@Lob
 	@Column(columnDefinition = "LONGBLOB")
 	private String photo;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	private Date dateBirth;
 	@Transient
@@ -65,14 +64,9 @@ public class PersonEntity {
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 	@Column
-	@NotBlank
-	private String username;
-	@Column
-	@NotBlank
-	private String password;
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "authorities_users", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
-	private Set<AuthorityEntity> authority;
+	private String address;
+	@OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
+	private User user;
 
 	public Long getId() {
 		return id;
@@ -122,14 +116,6 @@ public class PersonEntity {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getDirection() {
-		return direction;
-	}
-
-	public void setDirection(String direction) {
-		this.direction = direction;
-	}
-
 	public String getPhoto() {
 		return photo;
 	}
@@ -170,28 +156,20 @@ public class PersonEntity {
 		this.gender = gender;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public String getPassword() {
-		return password;
+	public User getUser() {
+		return user;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Set<AuthorityEntity> getAuthority() {
-		return authority;
-	}
-
-	public void setAuthority(Set<AuthorityEntity> authority) {
-		this.authority = authority;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

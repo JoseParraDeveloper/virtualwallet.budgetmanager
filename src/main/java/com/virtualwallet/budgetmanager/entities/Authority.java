@@ -13,7 +13,7 @@ import com.virtualwallet.budgetmanager.enumTypes.AuthorityEnum;
 
 @Entity
 @Table(name = "authorities")
-public class AuthorityEntity {
+public class Authority {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
