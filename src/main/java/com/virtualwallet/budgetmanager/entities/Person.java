@@ -1,16 +1,19 @@
 package com.virtualwallet.budgetmanager.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -67,6 +70,9 @@ public class Person {
 	private String address;
 	@OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
 	private User user;
+
+	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
+	private List<Operation> operations;
 
 	public Long getId() {
 		return id;
@@ -170,6 +176,14 @@ public class Person {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public List<Operation> getOperations() {
+		return operations;
+	}
+
+	public void setOperations(List<Operation> operations) {
+		this.operations = operations;
 	}
 
 }
