@@ -6,6 +6,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +23,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.virtualwallet.budgetmanager.enumTypes.TypeCoin;
 import com.virtualwallet.budgetmanager.enumTypes.TypeOperation;
 
 @Entity
@@ -45,10 +48,14 @@ public class Operation implements Serializable {
 	private Date date;
 	@Column
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	private TypeOperation typeOperation;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "person_id", nullable = false)
 	private Person person;
+	@Column
+	@Enumerated(EnumType.STRING)
+	private TypeCoin typeCoin;
 
 	public Long getId() {
 		return id;
@@ -96,6 +103,14 @@ public class Operation implements Serializable {
 
 	public void setPerson(Person person) {
 		this.person = person;
+	}
+
+	public TypeCoin getTypeCoin() {
+		return typeCoin;
+	}
+
+	public void setTypeCoin(TypeCoin typeCoin) {
+		this.typeCoin = typeCoin;
 	}
 
 }
