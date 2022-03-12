@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<!-- Required meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>GESTOR DE PRESUPUESTO</title>
+</head>
+<body>
+
+	<header>
+		<div th:insert="/templateOperation :: header"></div>
+	</header>
+	<div class="container mt-5">
+		<h1 th:text="*{titleTable}" class="text-center alert alert-info"
+			role="alert"></h1>
+	</div>
+	<div class="container mb-5">
+		<h3>
+			<span class="badge badge-dark"><span th:text="${coin.symbol}"></span>
+				<span th:text="${balanceCoin}"></span></span>
+		</h3>
+	</div>
+	<div class="container mt-2 mb-1">
+		<a class="btn btn-primary btn-sm text-dark"
+			th:href="@{/operations/addOperation}" title="Agregar Operación"><i
+			class="fa fa-plus-square" aria-hidden="true"></i> Agregar Operación</a>
+		<div class="btn-group">
+			<button type="button" class="btn btn-success btn-sm text-dark">
+				<i class="fa fa-exchange" aria-hidden="true"></i> Cambiar Cuenta
+			</button>
+			<button type="button"
+				class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split"
+				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item"
+					th:href="@{/operations/movements?typeCoin=PESOS}">PESOS</a> <a
+					class="dropdown-item"
+					th:href="@{/operations/movements?typeCoin=DOLLAR}">DOLAR</a>
+			</div>
+		</div>
+		<div class="btn-group">
+			<button type="button" class="btn btn-info btn-sm text-dark">
+				<i class="fa fa-exchange" aria-hidden="true"></i> Tipo Operación
+			</button>
+			<button type="button"
+				class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split"
+				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item"
+					th:href="@{|/operations/movements?typeCoin=${coin}&typeOperation=INGRESS|}">INGRESOS</a>
+				<a class="dropdown-item"
+					th:href="@{|/operations/movements?typeCoin=${coin}&typeOperation=EXPENSES|}">EGRESOS</a>
+			</div>
+		</div>
+		<a class="btn btn-light btn-sm text-dark" data-bs-toggle="modal"
+			data-bs-target="#modalAdvancedSearch"><i class="fa fa-search"
+			aria-hidden="true"></i> Búsqueda Avanzada</a>
+	</div>
+	<div class="container text-center mt-3">
+		<div class="container" th:if="${!operations.isEmpty()}">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">FECHA</th>
+						<th scope="col">CONCEPTO</th>
+						<th scope="col">IMPORTE</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr th:each="operation:${operations}">
+						<td th:text="${operation.date}"></td>
+						<td th:text="${operation.concept}"></td>
+						<td th:text="${operation.amount}"></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="row" th:if="${last>1}">
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<nav aria-label="Pagination">
+						<ul class="pagination justify-content-center">
+							<li class="page-item"
+								th:classappend="${previous==0 ? 'disabled' : ''}"><a
+								class="page-link"
+								th:href="@{|/operations/movements/?page=${previous}&typeCoin=${coin}|}"
+								aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+									<span class="sr-only">Previous</span>
+							</a></li>
+							<li class="page-item" th:each="page:${pages}"
+								th:classappend="${current==page ? 'active' : ''}"><a
+								class="page-link"
+								th:href="@{|/operations/movements/?page=${page}&typeCoin=${coin}|}"
+								th:text="${page}"></a></li>
+
+							<li class="page-item"
+								th:classappend="${current==last ? 'disabled' : ''}"><a
+								class="page-link"
+								th:href="@{|/operations/movements/?page=${next}&typeCoin=${coin}|}"
+								aria-label="Next"> <span aria-hidden="true">&raquo;</span> <span
+									class="sr-only">Next</span>
+							</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		<div class="alert alert-info alert-dismissable"
+			th:if="${operations.isEmpty()}">
+			<label th:text="${textInfo}"></label>
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+
+
+		<!-- Modal -->
+		<div class="modal fade" id="modalAdvancedSearch" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Búsqueda
+							Avanzada</h5>
+						<button type="button" class="close" data-bs-dismiss="modal"
+							aria-label="Close">&times;</button>
+					</div>
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary">Buscar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<footer class="mt-5">
+		<div th:insert="/template :: footer"></div>
+	</footer>
+
+	<div th:insert="/template :: JavaScriptBootstrap"></div>
+</body>
+</html>

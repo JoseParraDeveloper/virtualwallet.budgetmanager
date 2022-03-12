@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<!-- Required meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>GESTOR DE PRESUPUESTO</title>
+</head>
+<body>
+
+	<header>
+		<div th:insert="/templateOperation :: header"></div>
+	</header>
+	<div class="row justify-content-md-center">
+		<div class="row">
+			<div class="col-sm-7 mt-5">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Pesos $</h5>
+						<div class="card-text">
+							<h3 th:if="${balancePesos}>=0 and ${balancePesos}<10000">
+								<span class="badge badge-info">$ <span
+									th:text="${balancePesos}"></span></span>
+							</h3>
+							<h3 th:if="${balancePesos}>=10000">
+								<span class="badge badge-dark">$ <span
+									th:text="${balancePesos}"></span></span>
+							</h3>
+							<h3 th:if="${balancePesos}<0">
+								<span class="badge badge-danger">$ <span
+									th:text="${balancePesos}"></span></span>
+							</h3>
+						</div>
+						<a th:href="@{/operations/movements?typeCoin=PESOS}"
+							class="btn btn-primary">Ver Movimientos</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-7 mt-5">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Dolares U$S</h5>
+						<div class="card-text">
+							<h3 th:if="${balanceDollar}>=0 and ${balanceDollar}<10000">
+								<span class="badge badge-info">U$S <span
+									th:text="${balanceDollar}"></span></span>
+							</h3>
+							<h3 th:if="${balanceDollar}>=10000">
+								<span class="badge badge-dark">U$S <span
+									th:text="${balanceDollar}"></span></span>
+							</h3>
+							<h3 th:if="${balanceDollar}<0">
+								<span class="badge badge-danger">U$S <span
+									th:text="${balanceDollar}"></span></span>
+							</h3>
+						</div>
+						<a th:href="@{/operations/movements?typeCoin=DOLLAR}"
+							class="btn btn-primary">Ver Movimientos</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="mt-5">
+		<div th:insert="/template :: footer"></div>
+	</footer>
+
+	<div th:insert="/template :: JavaScriptBootstrap"></div>
+</body>
+</html>
