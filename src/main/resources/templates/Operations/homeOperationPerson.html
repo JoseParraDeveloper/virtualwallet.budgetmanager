@@ -135,10 +135,64 @@
 						<button type="button" class="close" data-bs-dismiss="modal"
 							aria-label="Close">&times;</button>
 					</div>
-					<div class="modal-body"></div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary">Buscar</button>
+					<div class="modal-body">
+						<div class="container">
+							<form th:action=@{/operations/advancedSearch}
+								th:object=${advancedSearchDTO} method="get">
+								<div class="form-group row">
+									<label class="col-md-4">Fecha Desde:</label> <input type="date"
+										th:field="*{dateFrom}"
+										class="form-control form-control-sm col-md-4" />
+								</div>
+								<div class="form-group row">
+									<label class="col-md-4">Fecha Hasta:</label> <input type="date"
+										th:field="*{dateTo}"
+										class="form-control form-control-sm col-md-4" />
+								</div>
+								<div class="form-group row">
+									<label class="col-md-4">Moneda:</label> <select
+										th:field="*{coin}"
+										class="form-control form-control-sm col-md-4">
+										<option th:each="typeCoin : ${listTypeCoin}"
+											th:text="${typeCoin.symbol}" th:value="${typeCoin}"></option>
+									</select>
+								</div>
+								<div class="form-group row">
+									<label class="col-md-4">Importe:</label> <input type="number"
+										th:field="*{amountFrom}" placeholder="desde"
+										class="form-control form-control-sm col-md-4" /> <input
+										type="number" th:field="*{amountTo}" placeholder="hasta"
+										class="form-control form-control-sm col-md-4" />
+								</div>
+								<div class="form-group row">
+									<label class="col-md-4">Tipo de Importe:</label>
+									<div class="custom-control custom-radio custom-control-inline">
+										<input type="radio" id="typeOperation1" name="typeOperation1"
+											class="custom-control-input" value="TODAS"
+											th:field="*{typeOperation}"> <label
+											class="custom-control-label" for="typeOperation1">Todos</label>
+									</div>
+									<div class="custom-control custom-radio custom-control-inline">
+										<input type="radio" id="typeOperation2" name="typeOperation2"
+											class="custom-control-input" value="INGRESS"
+											th:field="*{typeOperation}"> <label
+											class="custom-control-label" for="typeOperation2">Ingresos</label>
+									</div>
+									<div class="custom-control custom-radio custom-control-inline">
+										<input type="radio" id="typeOperation3" name="typeOperation3"
+											class="custom-control-input" value="EXPENSES"
+											th:field="*{typeOperation}"> <label
+											class="custom-control-label" for="typeOperation3">Egresos</label>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<input type="submit" class="btn btn-primary btn-sm"
+										value="Buscar" />
+								</div>
+							</form>
+						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>
