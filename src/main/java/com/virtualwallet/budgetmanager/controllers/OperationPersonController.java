@@ -2,6 +2,7 @@ package com.virtualwallet.budgetmanager.controllers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.virtualwallet.budgetmanager.DTOs.AdvancedSearchDTO;
 import com.virtualwallet.budgetmanager.DTOs.OperationDTO;
 import com.virtualwallet.budgetmanager.entities.Operation;
 import com.virtualwallet.budgetmanager.entities.Person;
@@ -29,7 +31,6 @@ import com.virtualwallet.budgetmanager.entities.User;
 import com.virtualwallet.budgetmanager.enumTypes.TypeCoin;
 import com.virtualwallet.budgetmanager.enumTypes.TypeOperation;
 import com.virtualwallet.budgetmanager.service.IOperationService;
-import com.virtualwallet.budgetmanager.service.IPersonService;
 import com.virtualwallet.budgetmanager.utils.PersonAuthenticationUtil;
 
 @Controller
@@ -63,8 +64,8 @@ public class OperationPersonController {
 	@GetMapping("/movements")
 	public String getMovements(@RequestParam Map<String, Object> params,
 			@RequestParam(value = "typeCoin", required = false) String typeCoin,
-			@RequestParam(value = "typeOperation", required = false) String typeOperation, Model model,
-			RedirectAttributes attribute) {
+			@RequestParam(value = "typeOperation", required = false) String typeOperation,
+			@ModelAttribute("advancedSearchDTO") AdvancedSearchDTO advancedSearch, Model model) {
 		personUser = personAuthenticationUtil.personAuthentication();
 		person = personUser.getPerson();
 		Long idPerson = person.getId();
@@ -100,6 +101,11 @@ public class OperationPersonController {
 			listOperationsPersonDTO.add(operationDTO);
 		}
 		BigDecimal balanceCoin = operationService.totalBalance(idPerson, typeCoin);
+		AdvancedSearchDTO advancedSearchDTO = new AdvancedSearchDTO();
+		advancedSearchDTO.setDateFrom(new Date());
+		advancedSearchDTO.setDateTo(new Date());
+		advancedSearchDTO.setCoin(TypeCoin.valueOf(typeCoin));
+		advancedSearchDTO.setTypeOperation("TODAS");
 
 		model.addAttribute("operations", listOperationsPersonDTO);
 		model.addAttribute("person", person);
@@ -111,6 +117,8 @@ public class OperationPersonController {
 		model.addAttribute("next", page + 2);
 		model.addAttribute("previous", page);
 		model.addAttribute("last", totalPage);
+		model.addAttribute("advancedSearchDTO", advancedSearchDTO);
+		model.addAttribute("listTypeCoin", TypeCoin.values());
 		if (listOperationsPersonDTO.isEmpty()) {
 			model.addAttribute("textInfo",
 					"No Tiene Movimientos en " + typeCoin
@@ -158,6 +166,18 @@ public class OperationPersonController {
 		}
 		attribute.addFlashAttribute("success", "OPERACIÓN REGISTRADA CON ÉXITO!");
 		return "redirect:/operations/";
+	}
+
+	@GetMapping("/advancedSearch")
+	public String advancedSearch(@RequestParam Map<String, Object> params,
+			@ModelAttribute("advancedSearchDTO") AdvancedSearchDTO advancedSearch, Model model) {
+
+		model.addAttribute("person", person);
+		model.addAttribute("coin", advancedSearch.getCoin());
+		model.addAttribute("operations", new ArrayList<OperationDTO>());
+		model.addAttribute("listTypeCoin", TypeCoin.values());
+		return "Operations/homeOperationPerson";
+
 	}
 
 }
