@@ -1,6 +1,8 @@
 package com.virtualwallet.budgetmanager.repository;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -27,4 +29,12 @@ public interface IOperationRepository extends JpaRepository<Operation, Long> {
 	@Query(value = "SELECT * FROM operations WHERE person_id = :idPerson AND type_coin = :typeCoin AND type_operation = :typeOperation ORDER BY date DESC", nativeQuery = true)
 	public Page<Operation> findAllOperationByTypeOperationAndCoin(@Param("idPerson") Long id,
 			@Param("typeCoin") String typeCoin, @Param("typeOperation") String typeOperation, Pageable pageable);
+
+	@Query(value = "SELECT * FROM operations WHERE person_id = :idPerson AND type_operation IN :typeOperations AND type_coin = :typeCoin "
+			+ " AND date BETWEEN :dateFrom AND :dateTo AND amount BETWEEN :amountFrom AND :amountTo ORDER BY date DESC", nativeQuery = true)
+	public Page<Operation> findAllByAdvancedSearch(@Param("idPerson") Long id,
+			@Param("typeOperations") Collection<String> typeOperations, @Param("typeCoin") String typeCoin,
+			@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo, @Param("amountFrom") BigDecimal amountFrom,
+			@Param("amountTo") BigDecimal amountTo, Pageable pageable);
+
 }
