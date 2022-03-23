@@ -17,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -40,7 +39,6 @@ public class Operation implements Serializable {
 	private String concept;
 	@Column
 	@NotNull
-	@Min(0)
 	private BigDecimal amount;
 	@Column
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

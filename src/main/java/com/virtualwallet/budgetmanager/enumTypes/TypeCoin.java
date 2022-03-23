@@ -2,7 +2,7 @@ package com.virtualwallet.budgetmanager.enumTypes;
 
 public enum TypeCoin {
 
-	DOLLAR("Dolares", "U$S"), PESOS("Pesos", "$");
+	DOLLAR("DOLAR", "U$S"), PESOS("PESOS", "$");
 
 	private String coin;
 	private String symbol;
@@ -16,16 +16,8 @@ public enum TypeCoin {
 		return coin;
 	}
 
-	public void setCoin(String coin) {
-		this.coin = coin;
-	}
-
 	public String getSymbol() {
 		return symbol;
-	}
-
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.virtualwallet.budgetmanager.controllers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import com.virtualwallet.budgetmanager.entities.Person;
 import com.virtualwallet.budgetmanager.entities.User;
 import com.virtualwallet.budgetmanager.enumTypes.TypeCoin;
 import com.virtualwallet.budgetmanager.enumTypes.TypeOperation;
+import com.virtualwallet.budgetmanager.repository.IOperationRepository;
 import com.virtualwallet.budgetmanager.service.IOperationService;
 import com.virtualwallet.budgetmanager.utils.PersonAuthenticationUtil;
 
@@ -42,6 +44,9 @@ public class OperationPersonController {
 
 	@Autowired
 	private IOperationService operationService;
+
+	@Autowired
+	IOperationRepository operationRepository;
 
 	@Autowired
 	private PersonAuthenticationUtil personAuthenticationUtil;
@@ -94,9 +99,7 @@ public class OperationPersonController {
 		for (Operation operation : listOperationsPerson) {
 			OperationDTO operationDTO = new OperationDTO();
 			operationDTO.setConcept(operation.getConcept());
-			operationDTO.setAmount((TypeOperation.INGRESS.toString().equals(operation.getTypeOperation().toString())
-					? operation.getAmount()
-					: operation.getAmount().multiply(new BigDecimal(-1))));
+			operationDTO.setAmount(operation.getAmount());
 			operationDTO.setDate(operation.getDate());
 			listOperationsPersonDTO.add(operationDTO);
 		}
@@ -121,8 +124,8 @@ public class OperationPersonController {
 		model.addAttribute("listTypeCoin", TypeCoin.values());
 		if (listOperationsPersonDTO.isEmpty()) {
 			model.addAttribute("textInfo",
-					"No Tiene Movimientos en " + typeCoin
-							+ (typeOperation != null ? " para el tipo de operación "
+					"NO TIENE MOVIMIENTOS EN " + TypeCoin.valueOf(typeCoin).getCoin()
+							+ (typeOperation != null ? " PARA EL TIPO DE OPERACIÓN "
 									+ (TypeOperation.INGRESS.name().equals(typeOperation) ? "INGRESOS." : "EGRESOS.")
 									: "."));
 		}
@@ -159,6 +162,10 @@ public class OperationPersonController {
 		}
 
 		try {
+			if (TypeOperation.EXPENSES.name().equals(operation.getTypeOperation().toString())) {
+				operation.setAmount(operation.getAmount().multiply(new BigDecimal(-1)));
+			}
+
 			operationService.saveOperation(operation);
 		} catch (Exception e) {
 			attribute.addFlashAttribute("error", "NO TIENE SUFICIENTE DINERO DISPONIBLE PARA REALIZAR ESTA OPERACIÓN!");
@@ -171,11 +178,55 @@ public class OperationPersonController {
 	@GetMapping("/advancedSearch")
 	public String advancedSearch(@RequestParam Map<String, Object> params,
 			@ModelAttribute("advancedSearchDTO") AdvancedSearchDTO advancedSearch, Model model) {
+		personUser = personAuthenticationUtil.personAuthentication();
+		person = personUser.getPerson();
+		Long idPerson = person.getId();
 
+		int page = (int) (params.get("page") != null ? (Long.valueOf(params.get("page").toString()) - 1) : 0);
+		PageRequest pageRequest = PageRequest.of(page, 10);
+		String typeOperation = advancedSearch.getTypeOperation();
+		Page<Operation> pageOperation = null;
+		Collection<String> typeOperations = new ArrayList<String>();
+		TypeOperation[] a = TypeOperation.values();
+
+		if (typeOperation.equals("TODAS")) {
+
+			for (TypeOperation typeOperation2 : a) {
+				typeOperations.add(typeOperation2.name());
+			}
+
+		}
+		pageOperation = operationRepository.findAllByAdvancedSearch(idPerson, typeOperations,
+				advancedSearch.getCoin().toString(), advancedSearch.getDateFrom(), advancedSearch.getDateTo(),
+				advancedSearch.getAmountFrom(), advancedSearch.getAmountTo(), pageRequest);
+
+		int totalPage = pageOperation.getTotalPages();
+
+		if (totalPage > 0) {
+
+			List<Long> pages = LongStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+			model.addAttribute("pages", pages);
+		}
+
+		List<Operation> listOperationsPerson = pageOperation.getContent();
+		List<OperationDTO> listOperationsPersonDTO = new ArrayList<OperationDTO>();
+
+		for (Operation operation : listOperationsPerson) {
+			OperationDTO operationDTO = new OperationDTO();
+			operationDTO.setConcept(operation.getConcept());
+			operationDTO.setAmount((operation.getAmount()));
+			operationDTO.setDate(operation.getDate());
+			listOperationsPersonDTO.add(operationDTO);
+		}
+
+		model.addAttribute("titleTable", "BÚSQUEDA AVANZADA.");
 		model.addAttribute("person", person);
 		model.addAttribute("coin", advancedSearch.getCoin());
-		model.addAttribute("operations", new ArrayList<OperationDTO>());
+		model.addAttribute("operations", listOperationsPersonDTO);
 		model.addAttribute("listTypeCoin", TypeCoin.values());
+		if (listOperationsPersonDTO.isEmpty()) {
+			model.addAttribute("textInfo", "NO EXISTEN MOVIMIENTOS CON LOS PARÁMETROS INDICADOS.");
+		}
 		return "Operations/homeOperationPerson";
 
 	}
