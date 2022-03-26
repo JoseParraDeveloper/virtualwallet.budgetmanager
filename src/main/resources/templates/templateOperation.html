@@ -28,8 +28,18 @@
 							DE USUARIOS</a></li>
 					<li class="nav-item"><a class="nav-link" th:href="@{#}">PLAZOS
 							FIJOS</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{#}">PAGOS
-							PENDIENTES</a></li>
+					<li class="nav-item dropdown" sec:authorize="hasRole('ROLE_USER')"><a
+						class="nav-link dropdown-toggle" th:href="@{#}"
+						id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+						aria-expanded="false">PAGOS PENDIENTES </a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<li><a class="dropdown-item"
+								th:href="@{/pendingPayments/?typeCoin=PESOS}">PESOS</a></li>
+							<li><a class="dropdown-item"
+								th:href="@{/pendingPayments/?typeCoin=DOLLAR}">DOLAR</a></li>
+							<li><hr class="dropdown-divider"></li>
+							<li><a class="dropdown-item" th:href="@{/pendingPayments/}">TODOS</a></li>
+						</ul></li>
 				</ul>
 
 			</div>
