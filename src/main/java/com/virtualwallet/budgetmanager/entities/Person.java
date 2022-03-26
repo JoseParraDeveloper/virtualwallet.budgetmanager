@@ -74,6 +74,9 @@ public class Person {
 	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
 	private List<Operation> operations;
 
+	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
+	private List<PendingPayment> listPendingPayment;
+
 	public Long getId() {
 		return id;
 	}
@@ -184,6 +187,14 @@ public class Person {
 
 	public void setOperations(List<Operation> operations) {
 		this.operations = operations;
+	}
+
+	public List<PendingPayment> getListPendingPayment() {
+		return listPendingPayment;
+	}
+
+	public void setListPendingPayment(List<PendingPayment> listPendingPayment) {
+		this.listPendingPayment = listPendingPayment;
 	}
 
 }
